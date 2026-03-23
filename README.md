@@ -1,4 +1,4 @@
-# AlgoX Complexity Analyzer
+# AlgoX Time Complexity Analyzer
 
 **AlgoX** is an Explainable AI (XAI) tool that predicts the runtime time complexity of Python and Java algorithms. 
 
