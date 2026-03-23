@@ -2,7 +2,7 @@
   "name": "algox-complexity-analyzer",
   "displayName": "AlgoX - Time Complexity Analyzer",
   "description": "Explainable AI Model for Code Runtime Complexity Classification",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "thamindu-nethmina",
   "icon": "images/logo.png",
   "repository": {
