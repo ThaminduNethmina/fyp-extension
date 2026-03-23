@@ -26,11 +26,11 @@ export function activate(context: vscode.ExtensionContext) {
             cancellable: false
         }, async (progress) => {
             try {
-                // 1. Clean the code and generate the map
+                // Clean the code and generate the map
                 const { cleanedCode, offsetMap } = cleanCodeAndMap(text, language);
 
-                // 2. Send the CLEANED code to the API
-                const apiUrl = 'http://127.0.0.1:8000/predict'; 
+                // Send the CLEANED code to the API
+                const apiUrl = 'https://himansha2001-algox-backend.hf.space/predict'; 
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -48,8 +48,8 @@ export function activate(context: vscode.ExtensionContext) {
                     const isWhitespaceOnly = item.token.replace(/Ġ/g, ' ').replace(/Ċ/g, '\n').trim() === '';
                     if (isWhitespaceOnly || (item.start_char === 0 && item.end_char === 0)) return;
 
-                    // 3. TRANSLATE COORDINATES
-                    // Ensure the token indices are within the bounds of our map
+                    // TRANSLATE COORDINATES
+                    // Ensure the token indices are within the bounds
                     if (item.start_char >= offsetMap.length) return;
                     
                     const originalStart = offsetMap[item.start_char];
@@ -121,7 +121,7 @@ function cleanCodeAndMap(original: string, lang: string) {
             matches.push({ index: match.index, length: match[0].length });
         }
         
-        // Replace from back to front so we don't shift the indices we haven't processed yet
+        // Replace from back to front
         for (let i = matches.length - 1; i >= 0; i--) {
             const m = matches[i];
             current = current.slice(0, m.index) + replaceWith + current.slice(m.index + m.length);
