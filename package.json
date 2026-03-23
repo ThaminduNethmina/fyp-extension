@@ -1,6 +1,6 @@
 {
   "name": "algox-complexity-analyzer",
-  "displayName": "algox-complexity-analyzer",
+  "displayName": "AlgoX - Time Complexity Analyzer",
   "description": "Explainable AI Model for Code Runtime Complexity Classification",
   "version": "0.0.2",
   "publisher": "thamindu-nethmina",
