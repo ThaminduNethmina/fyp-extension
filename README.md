@@ -1,71 +1,57 @@
-# algox-complexity-analyzer README
+# AlgoX Complexity Analyzer
 
-This is the README for your extension "algox-complexity-analyzer". After writing up a brief description, we recommend including the following sections.
+**AlgoX** is an Explainable AI (XAI) tool that predicts the runtime time complexity of Python and Java algorithms. 
 
-## Features
-
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+Instead of just giving you a Big-O prediction, AlgoX uses **SHAP (SHapley Additive exPlanations)** to visually highlight the exact lines and tokens of code that influenced the model's decision, right inside your VS Code editor.
 
 ---
 
-## Following extension guidelines
+## 🚀 Features
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+* **Multi-Language Support:** Analyzes both Python and Java algorithms.
+* **Hybrid AI Architecture:** Powered by a custom backend fusing AST-extracted static features (depth, branches, recursion) with a fine-tuned transformer model (UniXcoder).
+* **Visual Explainability:** Applies color-coded background highlights directly to your code. 
+  * 🔴 **Red Highlights:** Tokens that *increase* the complexity prediction.
+  * 🔵 **Blue Highlights:** Tokens that *decrease* the complexity prediction.
+* **Hover Insights:** Hover over any highlighted token to see its exact SHAP impact score.
+* **7 Complexity Classes:** Detects `CONSTANT`, `LINEAR`, `LOGN`, `NLOGN`, `QUADRATIC`, `CUBIC`, and `NP`.
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+![AlgoX in Action](images/demo.gif)
 
-## Working with Markdown
+---
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+## 🛠️ Usage
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+1. Open any `.py` or `.java` file containing an algorithm.
+2. Press `Ctrl + Shift + A` (or `Cmd + Shift + A` on Mac) to run the analysis.
+3. Wait a moment for the AI to process the code. A notification will appear with the predicted complexity and confidence score.
+4. Review the color-coded SHAP highlights in your editor.
+5. To clear the highlights, press `Ctrl + Shift + C` (or `Cmd + Shift + C` on Mac).
 
-## For more information
+Alternatively, you can access these commands via the VS Code Command Palette (`Ctrl+Shift+P`):
+* `AlgoX: Analyze Time Complexity`
+* `AlgoX: Clear Highlights`
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+---
 
-**Enjoy!**
+## ⚙️ Requirements
+
+This extension acts as the frontend client for the AlgoX AI model. To function, it requires the AlgoX FastAPI backend to be running. 
+
+By default, the extension points to the local development server (`http://127.0.0.1:8000`). If you are using the hosted Hugging Face Spaces backend, you will need to update the API URL in the extension source code and recompile.
+
+---
+
+## 🐛 Known Issues
+
+* **Whitespace Highlighting:** In rare cases, the BPE tokenizer may group newline characters with syntax, causing the highlight to slightly offset. The built-in source mapper mitigates most of this.
+* **Cold Starts:** If the backend API is hosted on a free Hugging Face Space, the first request of the day may take up to 30-60 seconds while the container wakes up.
+
+---
+
+## 📝 Release Notes
+
+### 1.0.0
+* Initial release of the AlgoX Complexity Analyzer.
+* Support for Java and Python.
+* Integration with SHAP for XAI token highlighting.
