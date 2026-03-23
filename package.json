@@ -3,6 +3,11 @@
   "displayName": "algox-complexity-analyzer",
   "description": "Explainable AI Model for Code Runtime Complexity Classification",
   "version": "0.0.1",
+  "publisher": "thamindu-nethmina",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ThaminduNethmina/fyp-extension.git"
+  },
   "engines": {
     "vscode": "^1.110.0"
   },
