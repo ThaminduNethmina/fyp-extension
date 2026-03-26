@@ -22,7 +22,7 @@ Instead of just giving you a Big-O prediction, AlgoX uses **SHAP (SHapley Additi
 
 ## 🛠️ Usage
 
-1. Open any `.py` or `.java` file containing an algorithm.
+1. Open any `.py` or `.java` file containing an algorithm. Optionally select a specific code snippet to analyze only that part.
 2. Press `Ctrl + Shift + A` (or `Cmd + Shift + A` on Mac) to run the analysis.
 3. Wait a moment for the AI to process the code. A notification will appear with the predicted complexity and confidence score.
 4. Review the color-coded SHAP highlights in your editor.

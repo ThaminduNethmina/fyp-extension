@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-// Global array to track and clear highlights between runs
+// Array to track and clear highlights between runs
 let activeDecorations: vscode.TextEditorDecorationType[] = [];
 
 export function activate(context: vscode.ExtensionContext) {
@@ -13,7 +13,15 @@ export function activate(context: vscode.ExtensionContext) {
             return;
         }
 
-        const text = editor.document.getText();
+        const hasSelection = !editor.selection.isEmpty;
+        const sourceRange = hasSelection
+            ? editor.selection
+            : new vscode.Range(
+                editor.document.positionAt(0),
+                editor.document.positionAt(editor.document.getText().length)
+            );
+        const sourceOffset = editor.document.offsetAt(sourceRange.start);
+        const text = editor.document.getText(sourceRange);
         const language = editor.document.languageId;
 
         // Clear previous highlights
@@ -48,14 +56,13 @@ export function activate(context: vscode.ExtensionContext) {
                     const isWhitespaceOnly = item.token.replace(/Ġ/g, ' ').replace(/Ċ/g, '\n').trim() === '';
                     if (isWhitespaceOnly || (item.start_char === 0 && item.end_char === 0)) return;
 
-                    // TRANSLATE COORDINATES
                     // Ensure the token indices are within the bounds
                     if (item.start_char >= offsetMap.length) return;
                     
-                    const originalStart = offsetMap[item.start_char];
-                    // end_char is exclusive, so map the last included char and add 1
+                    const originalStart = offsetMap[item.start_char] + sourceOffset;
+
                     const originalEndIndex = Math.min(item.end_char - 1, offsetMap.length - 1);
-                    const originalEnd = offsetMap[originalEndIndex] + 1;
+                    const originalEnd = offsetMap[originalEndIndex] + sourceOffset + 1;
 
                     const startPos = editor.document.positionAt(originalStart);
                     const endPos = editor.document.positionAt(originalEnd);
@@ -108,7 +115,6 @@ export function deactivate() {
 }
 
 function cleanCodeAndMap(original: string, lang: string) {
-    // Start with a 1:1 map where map[current_index] = original_index
     let map = Array.from({length: original.length}, (_, i) => i);
     let current = original;
 
@@ -133,12 +139,18 @@ function cleanCodeAndMap(original: string, lang: string) {
     }
 
     if (lang === 'java') {
+        applyRegex(/^\s*import\s+[^;\n]+;\s*$/gm, ''); // Remove import statements
         applyRegex(/\/\*[\s\S]*?\*\//g, ''); // Remove block comments
         applyRegex(/\/\/.*/g, '');           // Remove line comments
+    } else if (lang === 'python') {
+        applyRegex(/^\s*(import\s+[^\n]+|from\s+[^\n]+\s+import\s+[^\n]+)\s*$/gm, ''); // Remove import statements
+        // Remove triple-quoted strings
+        applyRegex(/'''[\s\S]*?'''|"""[\s\S]*?"""/g, '');
+        // Remove line comments
+        applyRegex(/#.*$/gm, '');
     }
-    applyRegex(/\n\s*\n/g, '\n');            // Remove double newlines
+    applyRegex(/\n\s*\n/g, '\n'); // Remove double newlines
 
-    // Mimic Python's .strip()
     let start = 0;
     while (start < current.length && current[start].trim() === '') start++;
     let end = current.length - 1;
