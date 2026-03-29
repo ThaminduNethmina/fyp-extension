@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-// Array to track and clear highlights between runs
+// Array to track
 let activeDecorations: vscode.TextEditorDecorationType[] = [];
 
 export function activate(context: vscode.ExtensionContext) {
@@ -37,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
                 // Clean the code and generate the map
                 const { cleanedCode, offsetMap } = cleanCodeAndMap(text, language);
 
-                // Send the CLEANED code to the API
+                // Send the cleaned code to the API
                 const apiUrl = 'https://himansha2001-algox-backend.hf.space/predict'; 
                 const response = await fetch(apiUrl, {
                     method: 'POST',
@@ -56,7 +56,7 @@ export function activate(context: vscode.ExtensionContext) {
                     const isWhitespaceOnly = item.token.replace(/Ġ/g, ' ').replace(/Ċ/g, '\n').trim() === '';
                     if (isWhitespaceOnly || (item.start_char === 0 && item.end_char === 0)) return;
 
-                    // Ensure the token indices are within the bounds
+                    // Ensure the tokens are within the bounds
                     if (item.start_char >= offsetMap.length) return;
                     
                     const originalStart = offsetMap[item.start_char] + sourceOffset;
@@ -139,9 +139,9 @@ function cleanCodeAndMap(original: string, lang: string) {
     }
 
     if (lang === 'java') {
-        applyRegex(/^\s*import\s+[^;\n]+;\s*$/gm, ''); // Remove import statements
-        applyRegex(/\/\*[\s\S]*?\*\//g, ''); // Remove block comments
-        applyRegex(/\/\/.*/g, '');           // Remove line comments
+        applyRegex(/^\s*import\s+[^;\n]+;\s*$/gm, '');  // Remove import statements
+        applyRegex(/\/\*[\s\S]*?\*\//g, '');            // Remove block comments
+        applyRegex(/\/\/.*/g, '');                      // Remove line comments
     } else if (lang === 'python') {
         applyRegex(/^\s*(import\s+[^\n]+|from\s+[^\n]+\s+import\s+[^\n]+)\s*$/gm, ''); // Remove import statements
         // Remove triple-quoted strings

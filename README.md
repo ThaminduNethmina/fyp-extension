@@ -38,8 +38,6 @@ Alternatively, you can access these commands via the VS Code Command Palette (`C
 
 This extension acts as the frontend client for the AlgoX AI model. To function, it requires the AlgoX FastAPI backend to be running. 
 
-By default, the extension points to the local development server (`http://127.0.0.1:8000`). If you are using the hosted Hugging Face Spaces backend, you will need to update the API URL in the extension source code and recompile.
-
 ---
 
 ## 🐛 Known Issues
